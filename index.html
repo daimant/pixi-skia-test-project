@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pixi → Skia</title>
+        <link rel="stylesheet" href="/src/styles/app.css" />
+    </head>
+    <body>
+        <div id="app">
+            <header class="toolbar">
+                <button type="button" id="btn-random" class="btn">
+                    Сгенерировать случайную линию/фигуру
+                </button>
+                <button
+                    type="button"
+                    id="btn-export-pdf"
+                    class="btn btn-accent"
+                >
+                    Экспорт в PDF
+                </button>
+            </header>
+
+            <!-- controls panel -->
+            <section class="panel controls-panel">
+                <h2>Управление выбранным элементом</h2>
+                <div class="control-row">
+                    <label
+                        >Выбранный: <span id="selected-label">нет</span></label
+                    >
+                </div>
+
+                <div class="control-row">
+                    <label for="tx-input">Translate X</label>
+                    <input id="tx-input" type="number" step="1" />
+                    <label for="ty-input">Y</label>
+                    <input id="ty-input" type="number" step="1" />
+                    <button id="apply-translate" class="btn">Применить</button>
+                </div>
+
+                <div class="control-row">
+                    <label for="rotation-input">Rotate (deg)</label>
+                    <input id="rotation-input" type="number" step="1" />
+                    <button id="apply-rotate" class="btn">Применить</button>
+                </div>
+
+                <div class="control-row">
+                    <label for="sx-input">Scale X</label>
+                    <input id="sx-input" type="number" step="0.1" />
+                    <label for="sy-input">Y</label>
+                    <input id="sy-input" type="number" step="0.1" />
+                    <button id="apply-scale" class="btn">Применить</button>
+                </div>
+
+                <div class="control-row">
+                    <button id="reset-transform" class="btn">
+                        Сбросить трансформ
+                    </button>
+                    <button id="clear-selection" class="btn">
+                        Снять выбор
+                    </button>
+                </div>
+            </section>
+
+            <main class="stage-row">
+                <section class="panel">
+                    <h2>Pixi (Canvas)</h2>
+                    <div id="pixi-host" class="canvas-host"></div>
+                </section>
+                <section class="panel">
+                    <h2>Skia (CanvasKit)</h2>
+                    <canvas id="skia-canvas" width="640" height="480"></canvas>
+                </section>
+            </main>
+            <p id="status" class="status" aria-live="polite"></p>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
