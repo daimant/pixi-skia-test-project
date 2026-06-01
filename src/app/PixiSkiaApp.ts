@@ -51,7 +51,12 @@ export class PixiSkiaApp {
     this.pixiApp.stage.eventMode = "static";
     this.pixiApp.stage.hitArea = this.pixiApp.screen;
 
-    pixiHost.appendChild(this.pixiApp.view as HTMLCanvasElement);
+    const pixiCanvas = this.pixiApp.view as HTMLCanvasElement;
+    pixiHost.appendChild(pixiCanvas);
+    // PixiJS sets inline width/height styles that override CSS — clear them
+    // so the CSS rule `width: 100%; height: auto` takes control.
+    pixiCanvas.style.width = "";
+    pixiCanvas.style.height = "";
     this.sceneRoot = createDemoScene((msg) => this.setStatus(msg));
     this.pixiApp.stage.addChild(this.sceneRoot);
 

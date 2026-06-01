@@ -1,10 +1,23 @@
-import { SHAPES } from 'pixi.js-legacy';
-import type { Circle, Ellipse, IShape, Matrix, Polygon, Rectangle, RoundedRectangle } from 'pixi.js-legacy';
-import type { GraphicsData } from '@pixi/graphics';
-import type { CanvasKit, Path } from './canvaskit-global';
-import { pixiWorldMatrixToSkia } from './pixiMatrix';
+import { SHAPES } from "pixi.js-legacy";
+import type {
+  Circle,
+  Ellipse,
+  IShape,
+  Matrix,
+  Polygon,
+  Rectangle,
+  RoundedRectangle,
+} from "pixi.js-legacy";
+import type { GraphicsData } from "@pixi/graphics";
+import type { CanvasKit, Path } from "./canvaskit-global";
+import { pixiWorldMatrixToSkia } from "./pixiMatrix";
 
-function addShapeToPath(ck: CanvasKit, path: Path, shape: IShape, type: SHAPES): void {
+function addShapeToPath(
+  ck: CanvasKit,
+  path: Path,
+  shape: IShape,
+  type: SHAPES,
+): void {
   switch (type) {
     case SHAPES.RECT: {
       const r = shape as Rectangle;
@@ -14,7 +27,11 @@ function addShapeToPath(ck: CanvasKit, path: Path, shape: IShape, type: SHAPES):
     case SHAPES.RREC: {
       const r = shape as RoundedRectangle;
       path.addRRect(
-        ck.RRectXY(ck.LTRBRect(r.x, r.y, r.x + r.width, r.y + r.height), r.radius, r.radius),
+        ck.RRectXY(
+          ck.LTRBRect(r.x, r.y, r.x + r.width, r.y + r.height),
+          r.radius,
+          r.radius,
+        ),
       );
       break;
     }
@@ -25,7 +42,14 @@ function addShapeToPath(ck: CanvasKit, path: Path, shape: IShape, type: SHAPES):
     }
     case SHAPES.ELIP: {
       const e = shape as Ellipse;
-      path.addOval([e.x - e.width / 2, e.y - e.height / 2, e.x + e.width / 2, e.y + e.height / 2]);
+      // Pixi's Ellipse stores width/height as semi-axes (half-dimensions),
+      // so the bounding box spans exactly ±width and ±height from the centre.
+      path.addOval([
+        e.x - e.width,
+        e.y - e.height,
+        e.x + e.width,
+        e.y + e.height,
+      ]);
       break;
     }
     case SHAPES.POLY: {
