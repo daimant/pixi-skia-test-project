@@ -1,4 +1,4 @@
-import { Graphics } from "pixi.js-legacy";
+import { Graphics, Rectangle } from "pixi.js-legacy";
 import type { InteractionHandler } from "./demoScene";
 
 const COLORS = [0xff6b6b, 0x4ecdc4, 0xffe66d, 0x95e1d3, 0xf38181, 0xaa96da];
@@ -34,10 +34,20 @@ export function createRandomGraphic(onInteract?: InteractionHandler): Graphics {
       .drawRect(-w / 2, -h / 2, w, h)
       .endFill();
   } else if (kind === 1) {
-    g.lineStyle(4 + Math.random() * 8, color, 1);
+    const endX = 80 + Math.random() * 100;
+    const endY = Math.random() * 120 - 60;
+    const strokeW = 4 + Math.random() * 8;
+    g.lineStyle(strokeW, color, 1);
     g.moveTo(0, 0);
-    g.lineTo(80 + Math.random() * 100, Math.random() * 120 - 60);
-    g.hitArea = g.getBounds().pad(10);
+    g.lineTo(endX, endY);
+    // hitArea задаётся в локальных координатах объекта (до применения position/angle/scale)
+    const pad = strokeW / 2 + 12;
+    g.hitArea = new Rectangle(
+      Math.min(0, endX) - pad,
+      Math.min(0, endY) - pad,
+      Math.abs(endX) + pad * 2,
+      Math.abs(endY) + pad * 2,
+    );
   } else {
     g.beginFill(color)
       .drawEllipse(0, 0, 30 + Math.random() * 70, 20 + Math.random() * 50)
